@@ -13,7 +13,9 @@ const HeadlessTableContent = ({
       <td className="text-center p-[8px] border border-white">
         {available_quantity}
       </td>
-      <td className="text-end p-[8px] border border-white">{price_per_unit}</td>
+      <td className="text-center p-[8px] border border-white">
+        {price_per_unit}
+      </td>
 
       <td className="text-center p-[8px] border border-white">
         <input

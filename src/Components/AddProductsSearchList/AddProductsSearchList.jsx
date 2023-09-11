@@ -1,17 +1,14 @@
-/* eslint-disable react/prop-types */
 import { useState } from "react";
 import HeadlessTableContent from "../HeadlessTableContent/HeadlessTableContent";
-import { useCartContext } from "../../GlobalContext/CartContext";
 import { useFilterProductContext } from "../../GlobalContext/FilterContext";
+import { useCartContext } from "../../GlobalContext/CartContext";
 
-const SearchProductList = ({ filteredProducts }) => {
-  const { handleAddToBill } = useCartContext();
-  const { handleEmptySearch } = useFilterProductContext();
+const AddProductsSearchList = () => {
   const [inputValue, setInputValue] = useState(1);
-
-  // Step 2: Function to handle changes in the input field value
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
+  const { filteredProducts, setSearchInput } = useFilterProductContext();
+  const { addPurchasedProducts } = useCartContext();
+  const onInputChange = (e) => {
+    setInputValue(e.target.value);
   };
 
   return (
@@ -31,17 +28,17 @@ const SearchProductList = ({ filteredProducts }) => {
             </th>
             <th className="text-center p-[8px] border border-white w-[5%]"></th>
           </tr>
-          {filteredProducts?.map((currElem) => (
+          {/* content */}
+          {filteredProducts?.map((item) => (
             <HeadlessTableContent
-              key={currElem._id}
-              name={currElem?.title}
-              available_quantity={currElem?.stock}
-              price_per_unit={currElem.price}
+              key={item._id}
+              name={item?.title}
+              available_quantity={item?.stock}
+              price_per_unit={item?.price}
+              onInputChange={onInputChange}
               inputValue={inputValue}
-              onInputChange={handleInputChange}
               handleButtonClick={() => {
-                handleAddToBill(currElem, inputValue);
-                handleEmptySearch();
+                addPurchasedProducts(item, inputValue), setSearchInput("");
               }}
             />
           ))}
@@ -53,4 +50,4 @@ const SearchProductList = ({ filteredProducts }) => {
   );
 };
 
-export default SearchProductList;
+export default AddProductsSearchList;

@@ -3,21 +3,30 @@ import SearchProductList from "../../Components/SearchProductList/SearchProductL
 import Table from "../../Components/Table/Table";
 import { useCartContext } from "../../GlobalContext/CartContext";
 import { useFilterProductContext } from "../../GlobalContext/FilterContext";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import Loader from "../Shared/Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const Sell = () => {
+  const [loading, setLoading] = useState(false);
   const [discountValue, setDiscountValue] = useState(0);
   const [discountedAmount, setDiscountedAmount] = useState(0);
+  const navigate = useNavigate();
   const { handleInputChange, searchInput, filteredProducts } =
     useFilterProductContext();
-
   const { carts, itemRemove } = useCartContext();
-  const subTotal = carts
-    .reduce(
-      (sum, item) =>
-        item?.product_price_per_unit * item?.product_quantity + sum,
-      0
-    )
-    .toFixed(2);
+  const subTotal =
+    carts.length > 0
+      ? carts
+          .reduce(
+            (sum, item) =>
+              item?.product_price_per_unit * item?.product_quantity + sum,
+            0
+          )
+          .toFixed(2)
+      : 0;
   // Step 2: Function to handle changes in the input field value
   const onDiscountInputChange = (event) => {
     setDiscountValue(event.target.value);
@@ -28,7 +37,76 @@ const Sell = () => {
     setDiscountedAmount(discountedAmount);
   };
 
-  return (
+  const handleSellingInvoice = (
+    soldProducts,
+    totalPrice,
+    discountedPrice,
+    totalDiscount
+  ) => {
+    // sold product data
+    const invoiceData = [
+      {
+        discountedPrice,
+        totalPrice,
+        totalDiscount,
+        soldProducts,
+      },
+    ];
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to sell those items?",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, sell it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setLoading(true);
+        axios
+          .patch(
+            `${import.meta.env.VITE_API_URL}/api/decrease/products/stock`,
+            soldProducts
+          )
+          .then((response) => {
+            if (response.statusText == "OK") {
+              axios
+                .post(
+                  `${import.meta.env.VITE_API_URL}/api/add/soldInvoice`,
+                  invoiceData
+                )
+                .then((response) => {
+                  if (response.data.insertedId) {
+                    Swal.fire({
+                      icon: "success",
+                      title: "Success",
+                      text: `Your sold invoice has been created for future use note this id "${response.data.insertedId}"`,
+                    });
+                    setLoading(false);
+                    navigate(`/sell/invoice/${response.data.insertedId}`);
+                  }
+                })
+                .catch((error) => {
+                  if (error) {
+                    toast.error("Something went wrong");
+                    setLoading(false);
+                  }
+                });
+            }
+          })
+          .catch((error) => {
+            if (error) {
+              toast.error(error.message);
+              setLoading(false);
+            }
+          });
+      }
+    });
+  };
+
+  return loading ? (
+    <Loader />
+  ) : (
     <div className="bg-white w-full h-full mt-6 lg:mt-0">
       <div className="lg:max-w-5xl bg-gray-100 shadow-2xl h-screen lg:h-full mx-auto">
         <div className="py-6 px-1 md:px-4">
@@ -36,8 +114,6 @@ const Sell = () => {
             <input
               className="py-2 w-full border-2 border-gray-400 rounded-md px-4"
               type="text"
-              name=""
-              id=""
               placeholder="Search"
               value={searchInput}
               onChange={handleInputChange}
@@ -127,7 +203,17 @@ const Sell = () => {
                 </div>
                 <p className="border-b-2 border-black"></p>
                 <div className="text-end">
-                  <button className="bg-blue-600 px-4 py-1 text-white hover:bg-gray-900 duration-500 rounded-md">
+                  <button
+                    onClick={() =>
+                      handleSellingInvoice(
+                        carts,
+                        subTotal,
+                        subTotal - discountedAmount,
+                        discountedAmount
+                      )
+                    }
+                    className="bg-blue-600 px-4 py-1 text-white hover:bg-gray-900 duration-500 rounded-md"
+                  >
                     Make Invoice
                   </button>
                 </div>

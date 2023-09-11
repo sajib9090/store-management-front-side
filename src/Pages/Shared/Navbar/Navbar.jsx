@@ -4,7 +4,7 @@ import { FaStore } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 const Navbar = () => {
   return (
-    <nav>
+    <nav className="lg:sticky lg:top-0">
       <div className="h-screen w-[90px] bg-white hidden lg:flex border-r border-gray-300 flex-col justify-center space-y-8 px-2">
         <NavLink
           to={"/"}

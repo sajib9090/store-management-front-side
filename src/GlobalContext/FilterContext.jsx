@@ -22,7 +22,7 @@ export const FilterContextProvider = ({ children }) => {
     searchInput
   ) => {
     if (searchInput) {
-      const sortBySearchValue = products?.products?.filter((currentElement) =>
+      const sortBySearchValue = products?.filter((currentElement) =>
         currentElement?.title?.toLowerCase().includes(searchInput)
       );
       setFilteredProducts(sortBySearchValue);
@@ -48,6 +48,7 @@ export const FilterContextProvider = ({ children }) => {
       value={{
         handleInputChange,
         searchInput,
+        setSearchInput,
         filteredProducts,
         handleEmptySearch,
       }}

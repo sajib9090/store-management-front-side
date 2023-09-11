@@ -4,12 +4,22 @@ import reducer from "../Reducers/ProductReducer";
 
 const ProductContext = createContext();
 
-const API = `https://dummyjson.com/products`;
-
 const initialState = {
   isProductLoading: false,
   isProductError: false,
   products: [],
+  //generic
+  isGenericLoading: false,
+  isGenericError: false,
+  generics: [],
+  //company
+  isCompanyLoading: false,
+  isCompanyError: false,
+  companies: [],
+  //category
+  isCategoryLoading: false,
+  isCategoryError: false,
+  categories: [],
 };
 
 // eslint-disable-next-line react/prop-types
@@ -27,10 +37,46 @@ const ProductProvider = ({ children }) => {
       dispatch({ type: "API_ERROR" });
     }
   };
+  // all generic function
+  const getGenerics = async (url) => {
+    dispatch({ type: "SET_GENERIC_LOADING" });
+    try {
+      const res = await axios.get(url);
+      const generics = await res.data;
+      dispatch({ type: "SET_GENERIC_API_DATA", payload: generics });
+    } catch (error) {
+      dispatch({ type: "SET_GENERIC_API_ERROR" });
+    }
+  };
+  //all company's function
+  const getCompanies = async (url) => {
+    dispatch({ type: "SET_COMPANIES_LOADING" });
+    try {
+      const res = await axios.get(url);
+      const companies = await res.data;
+      dispatch({ type: "SET_COMPANIES_API_DATA", payload: companies });
+    } catch (error) {
+      dispatch({ type: "SET_COMPANIES_API_ERROR" });
+    }
+  };
+  //all company's function
+  const getCategories = async (url) => {
+    dispatch({ type: "SET_CATEGORIES_LOADING" });
+    try {
+      const res = await axios.get(url);
+      const categories = await res.data;
+      dispatch({ type: "SET_CATEGORIES_API_DATA", payload: categories });
+    } catch (error) {
+      dispatch({ type: "SET_CATEGORIES_API_ERROR" });
+    }
+  };
 
   //all products
   useEffect(() => {
-    getProducts(API);
+    getProducts(`${import.meta.env.VITE_API_URL}/api/get/products`);
+    getCompanies(`${import.meta.env.VITE_API_URL}/api/get/companies`);
+    getGenerics(`${import.meta.env.VITE_API_URL}/api/get/generics`);
+    getCategories(`${import.meta.env.VITE_API_URL}/api/get/categories`);
   }, []);
 
   return (
