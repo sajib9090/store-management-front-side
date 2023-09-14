@@ -18,7 +18,7 @@ const Sell = () => {
     useFilterProductContext();
   const { carts, itemRemove } = useCartContext();
   const subTotal =
-    carts.length > 0
+    carts?.length > 0
       ? carts
           .reduce(
             (sum, item) =>
@@ -69,7 +69,7 @@ const Sell = () => {
             soldProducts
           )
           .then((response) => {
-            if (response.statusText == "OK") {
+            if (response) {
               axios
                 .post(
                   `${import.meta.env.VITE_API_URL}/api/add/soldInvoice`,
@@ -204,6 +204,7 @@ const Sell = () => {
                 <p className="border-b-2 border-black"></p>
                 <div className="text-end">
                   <button
+                    disabled={carts.length == 0}
                     onClick={() =>
                       handleSellingInvoice(
                         carts,

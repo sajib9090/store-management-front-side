@@ -19,10 +19,10 @@ tr:nth-child(even) {
   position: relative;
   list-style: none;
   padding: 8px 15px;
-  border-radius: 0px 10px 0 20px;
+  border-radius: 5px;
   cursor: pointer;
-  margin: 0 1px;
-  width: 80px;
+  margin: 0 2px;
+  width: 150px;
 }
 .react-tabs__tab:hover {
   background-color: gray;

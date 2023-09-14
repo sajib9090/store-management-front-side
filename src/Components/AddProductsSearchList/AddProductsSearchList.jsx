@@ -38,7 +38,9 @@ const AddProductsSearchList = () => {
               onInputChange={onInputChange}
               inputValue={inputValue}
               handleButtonClick={() => {
-                addPurchasedProducts(item, inputValue), setSearchInput("");
+                addPurchasedProducts(item, inputValue),
+                  setSearchInput(""),
+                  setInputValue(1);
               }}
             />
           ))}

@@ -46,7 +46,7 @@ const AddProductsContent = () => {
             invoice
           )
           .then((response) => {
-            if (response.statusText == "OK") {
+            if (response) {
               //
               axios
                 .post(
@@ -144,6 +144,7 @@ const AddProductsContent = () => {
             <p className="border-b-2 border-black"></p>
             <div className="text-end">
               <button
+                disabled={purchaseCarts == 0}
                 onClick={() => postPurchaseInvoice(purchaseCarts)}
                 className="bg-blue-600 px-4 py-1 text-white hover:bg-gray-900 duration-500 rounded-md"
               >

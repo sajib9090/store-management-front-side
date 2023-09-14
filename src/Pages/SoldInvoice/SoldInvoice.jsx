@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import InvoiceTableHead from "../../Components/InvoiceTable/InvoiceTableHead";
 import InvoiceTableContent from "../../Components/InvoiceTableContent/InvoiceTableContent";
 import InvoiceTitle from "../../Components/InvoiceTitle/InvoiceTitle";
 import InvoiceFooter from "../../Components/InvoiceFooter/InvoiceFooter";
+import { useCartContext } from "../../GlobalContext/CartContext";
 
 const SoldInvoice = () => {
   const { id } = useParams();
   const [soldInvoice, setSoldInvoice] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const { handleRemoveAllSoldCart } = useCartContext();
   const printableRef = useRef(null);
 
   useEffect(() => {
@@ -39,6 +41,11 @@ const SoldInvoice = () => {
     window.print();
 
     document.body.innerHTML = originalContents;
+  };
+
+  const handleRefresh = () => {
+    handleRemoveAllSoldCart();
+    window.location.href = "/sell";
   };
 
   return (
@@ -79,11 +86,13 @@ const SoldInvoice = () => {
           />
         </div>
         <div className="max-w-[15rem] flex items-center justify-between ml-auto py-6 px-4">
-          <Link to={"/sell"}>
-            <button className="bg-gray-500 px-2 py-1 text-white">
-              Back to Sell
-            </button>
-          </Link>
+          <button
+            onClick={(handleRemoveAllSoldCart, handleRefresh)}
+            className="bg-gray-500 px-2 py-1 text-white"
+          >
+            Back to Sell
+          </button>
+
           <button
             onClick={handlePrint}
             className="bg-blue-500 px-2 py-1 text-white"

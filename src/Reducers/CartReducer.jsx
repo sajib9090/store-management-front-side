@@ -91,7 +91,12 @@ const CartReducer = (state, action) => {
   // remove all data from cart
   if (action.type === "REMOVE_PURCHASE_CART") {
     return {
-      purchaseCarts: [{}],
+      purchaseCarts: [],
+    };
+  }
+  if (action.type === "REMOVE_SOLD_CART") {
+    return {
+      carts: [],
     };
   }
 
@@ -99,4 +104,3 @@ const CartReducer = (state, action) => {
 };
 
 export default CartReducer;
-// REMOVE_ITEM_FROM_PURCHASE_CART

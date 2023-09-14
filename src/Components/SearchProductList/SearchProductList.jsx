@@ -42,6 +42,7 @@ const SearchProductList = ({ filteredProducts }) => {
               handleButtonClick={() => {
                 handleAddToBill(currElem, inputValue);
                 handleEmptySearch();
+                setInputValue(1);
               }}
             />
           ))}

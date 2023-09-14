@@ -5,11 +5,13 @@ import InvoiceFooter from "../../Components/InvoiceFooter/InvoiceFooter";
 import InvoiceTableContent from "../../Components/InvoiceTableContent/InvoiceTableContent";
 import InvoiceTitle from "../../Components/InvoiceTitle/InvoiceTitle";
 import InvoiceTableHead from "../../Components/InvoiceTable/InvoiceTableHead";
+import { useCartContext } from "../../GlobalContext/CartContext";
 
 const PurchaseInvoice = () => {
   const { id } = useParams();
   const [purchaseInvoice, setPurchaseInvoice] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const { handleRemoveAllPurchaseCart } = useCartContext();
   const printableRef = useRef(null);
 
   useEffect(() => {
@@ -46,13 +48,15 @@ const PurchaseInvoice = () => {
   const handlePrint = () => {
     //grab the content that want to print
     const content = printableRef.current.innerHTML;
-
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = content;
-
     window.print();
-
     document.body.innerHTML = originalContents;
+  };
+
+  const handleRefresh = () => {
+    handleRemoveAllPurchaseCart();
+    window.location.href = "/store";
   };
 
   return (
@@ -85,7 +89,10 @@ const PurchaseInvoice = () => {
         </div>
         <div className="max-w-[16rem] flex items-center justify-between ml-auto py-6 px-4">
           <Link to={"/store"}>
-            <button className="bg-gray-500 px-2 py-1 text-white">
+            <button
+              onClick={handleRefresh}
+              className="bg-gray-500 px-2 py-1 text-white"
+            >
               Back to Store
             </button>
           </Link>

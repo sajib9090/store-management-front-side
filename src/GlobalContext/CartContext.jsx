@@ -7,8 +7,8 @@ const CartContext = createContext();
 //getting carts data from local storage
 const getLocalStorageCartData = () => {
   let localStorageCartData = localStorage.getItem("bill-cart");
-  // if our first carts value empty then set empy array
-  if (localStorageCartData === null) {
+  // if our first carts value empty then set empty array
+  if (localStorageCartData == "undefined" || localStorageCartData === null) {
     return [];
   } else {
     return JSON.parse(localStorageCartData);
@@ -16,8 +16,8 @@ const getLocalStorageCartData = () => {
 };
 const getLocalStoragePurchaseCartData = () => {
   let localStorageCartData = localStorage.getItem("purchase-cart");
-  // if our first carts value empty then set empy array
-  if (localStorageCartData === null) {
+  // if our first carts value empty then set empty array
+  if (localStorageCartData == "undefined" || localStorageCartData === null) {
     return [];
   } else {
     return JSON.parse(localStorageCartData);
@@ -69,12 +69,12 @@ const CartProvider = ({ children }) => {
   const handleRemoveFromPurchase = (item) => {
     dispatch({ type: "REMOVE_ITEM_FROM_PURCHASE_CART", payload: item });
   };
-  const purchasedCartRemove = (item) => {
-    dispatch({ type: "REMOVE_PURCHASE_CART", payload: item });
-  };
 
   const handleRemoveAllPurchaseCart = () => {
     dispatch({ type: "REMOVE_PURCHASE_CART" });
+  };
+  const handleRemoveAllSoldCart = () => {
+    dispatch({ type: "REMOVE_SOLD_CART" });
   };
 
   //add cart data inside local storage
@@ -92,8 +92,8 @@ const CartProvider = ({ children }) => {
         itemRemove,
         addPurchasedProducts,
         handleRemoveFromPurchase,
-        purchasedCartRemove,
         handleRemoveAllPurchaseCart,
+        handleRemoveAllSoldCart,
       }}
     >
       {children}
