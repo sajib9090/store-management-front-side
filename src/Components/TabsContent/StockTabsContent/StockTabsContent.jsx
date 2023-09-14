@@ -1,9 +1,10 @@
 import { useState } from "react";
+import FindProductsByCompany from "../../../Pages/Store/FindInvoiceByCompany/FindProductsByCompany";
 
 const StockTabsContent = () => {
   const [toggleOption, setToggleOption] = useState(0);
   return (
-    <div className="min-h-screen mt-4">
+    <div className="min-h-screen mt-6">
       <div className="text-center">
         <div className="flex items-center justify-center lg:h-12 space-x-4 py-4 bg-blue-400">
           <p
@@ -14,27 +15,15 @@ const StockTabsContent = () => {
             }
             onClick={() => setToggleOption(1)}
           >
-            Selling History
-          </p>
-
-          <p
-            className={
-              toggleOption == 2
-                ? "text-gray-100 font-bold cursor-pointer underline"
-                : "text-black cursor-pointer font-bold"
-            }
-            onClick={() => setToggleOption(2)}
-          >
-            Find Invoice
+            Find Stock by Company
           </p>
         </div>
         {/* content */}
 
         <div className={toggleOption == 1 ? "block" : "hidden"}>
-          <div className="mt-2">s</div>
-        </div>
-        <div className={toggleOption == 2 ? "block" : "hidden"}>
-          <div className="">ss</div>
+          <div className="">
+            <FindProductsByCompany />
+          </div>
         </div>
       </div>
     </div>

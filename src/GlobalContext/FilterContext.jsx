@@ -38,9 +38,37 @@ export const FilterContextProvider = ({ children }) => {
   };
   const [filteredProducts, setFilteredProducts] = useState();
 
+  //
+  const [selectedOption, setSelectedOption] = useState("");
+  const [filterProductsByCompany, setFilterProductsByCompany] = useState([]);
+
+  const FilterProductByCompany = (
+    products,
+    setSelectedOption,
+    selectedOption,
+    setFilterProductsByCompany
+  ) => {
+    if (selectedOption) {
+      const sortBySelectedValue = products?.filter((currentElement) =>
+        currentElement?.company_name?.toLowerCase().includes(selectedOption)
+      );
+      setFilterProductsByCompany(sortBySelectedValue);
+      return;
+    }
+    if (searchInput === "") {
+      setFilterProductsByCompany([]);
+    }
+  };
+
   useEffect(() => {
     filteredState(products, searchInput, setFilteredProducts, searchInput);
-  }, [searchInput, products]);
+    FilterProductByCompany(
+      products,
+      setSelectedOption,
+      selectedOption,
+      setFilterProductsByCompany
+    );
+  }, [searchInput, products, selectedOption]);
 
   //return value
   return (
@@ -51,6 +79,10 @@ export const FilterContextProvider = ({ children }) => {
         setSearchInput,
         filteredProducts,
         handleEmptySearch,
+        selectedOption,
+        setSelectedOption,
+        filterProductsByCompany,
+        setFilterProductsByCompany,
       }}
     >
       {children}
