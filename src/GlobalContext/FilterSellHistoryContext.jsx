@@ -10,6 +10,10 @@ const FilterSellHistoryProvider = ({ children }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [filteredData, setFilteredData] = useState([]);
 
+  const handleCaptureDate = (date) => {
+    setSelectedDate(date);
+  };
+
   function filterDataByDate(data, selectedDate) {
     return data?.filter((item) => {
       const createdTime = new Date(item.createdTime);
@@ -36,11 +40,11 @@ const FilterSellHistoryProvider = ({ children }) => {
     // Call the filterDataByDate function and set the result in the state
     const filteredResult = filterDataByDate(allSellHistory, selectedDate);
     setFilteredData(filteredResult);
-  }, [selectedDate, allSellHistory]);
+  }, [selectedDate, setSelectedDate, allSellHistory]);
 
   return (
     <SellHistoryFilterContext.Provider
-      value={{ setSelectedDate, filteredData, selectedDate }}
+      value={{ setSelectedDate, filteredData, selectedDate, handleCaptureDate }}
     >
       {children}
     </SellHistoryFilterContext.Provider>

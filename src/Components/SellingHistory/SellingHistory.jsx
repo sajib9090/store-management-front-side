@@ -4,7 +4,7 @@ import { useSellHistoryFilterContext } from "../../GlobalContext/FilterSellHisto
 import { TbCurrencyTaka } from "react-icons/tb";
 
 const SellingHistory = () => {
-  const { selectedDate, setSelectedDate, filteredData } =
+  const { selectedDate, setSelectedDate, filteredData, handleCaptureDate } =
     useSellHistoryFilterContext();
 
   const totalDiscount =
@@ -35,12 +35,18 @@ const SellingHistory = () => {
         Sell Record Find By Date
       </h1>
 
-      <div className="text-center my-4">
+      <div className="text-center my-4 flex items-center justify-center">
         <DatePicker
           className="text-xl text-center"
           selected={selectedDate}
           onChange={(date) => setSelectedDate(date)}
         />
+        <button
+          onClick={() => handleCaptureDate(selectedDate)}
+          className="bg-blue-400 px-4 text-white"
+        >
+          Search
+        </button>
       </div>
       <div>
         <table className="overflow-x-scroll mx-auto sm:max-w-full md:max-w-full border-collapse w-full">

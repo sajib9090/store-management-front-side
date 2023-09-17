@@ -3,6 +3,7 @@ import TabsHeadline from "../../Components/TabsHeadline/TabsHeadline";
 import AddTabsContent from "../../Components/TabsContent/AddTabsContent/AddTabsContent";
 import StockTabsContent from "../../Components/TabsContent/StockTabsContent/StockTabsContent";
 import SellTabsContent from "../../Components/TabsContent/SellTabsContent/SellTabsContent";
+import { Link } from "react-router-dom";
 
 const Store = () => {
   return (
@@ -12,13 +13,19 @@ const Store = () => {
           <div className="text-center">
             <TabList>
               <Tab>
-                <TabsHeadline headline="Add" />
+                <Link to="/store/add">
+                  <TabsHeadline headline="Add" />
+                </Link>
               </Tab>
               <Tab>
-                <TabsHeadline headline="Stock" />
+                <Link to="/store/stock">
+                  <TabsHeadline headline="Stock" />
+                </Link>
               </Tab>
               <Tab>
-                <TabsHeadline headline="Sell" />
+                <Link to="/store/sell">
+                  <TabsHeadline headline="Sell" />
+                </Link>
               </Tab>
             </TabList>
           </div>
