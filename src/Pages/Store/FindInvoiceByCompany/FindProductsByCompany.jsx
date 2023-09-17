@@ -22,6 +22,7 @@ const FindProductsByCompany = () => {
     setSelectedOption(data.company.value);
   };
   filterProductsByCompany.sort((a, b) => a.stock - b.stock);
+
   return (
     <div>
       <div className="bg-blue-100">

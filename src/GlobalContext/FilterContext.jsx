@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useProductContext } from "./ProductContext";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const FilterProductContext = createContext();
 
@@ -60,6 +62,36 @@ export const FilterContextProvider = ({ children }) => {
     }
   };
 
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You want to delete ${item.title}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const remainingData = filterProductsByCompany?.filter(
+          (currElem) => currElem._id != item._id
+        );
+        setFilterProductsByCompany(remainingData);
+        axios
+          .delete(
+            `${import.meta.env.VITE_API_URL}/api/delete/product/${item?._id}`
+          )
+          .then((res) => {
+            console.log(res);
+            Swal.fire("Deleted!", `${item?.title}`, "success");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
+
   useEffect(() => {
     filteredState(products, searchInput, setFilteredProducts, searchInput);
     FilterProductByCompany(
@@ -83,6 +115,7 @@ export const FilterContextProvider = ({ children }) => {
         setSelectedOption,
         filterProductsByCompany,
         setFilterProductsByCompany,
+        handleDelete,
       }}
     >
       {children}

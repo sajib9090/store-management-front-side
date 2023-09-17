@@ -8,7 +8,6 @@ import { FilterContextProvider } from "./GlobalContext/FilterContext";
 import { CartProvider } from "./GlobalContext/CartContext";
 import { Toaster } from "react-hot-toast";
 import { SellHistoryProvider } from "./GlobalContext/SellHistoryContext";
-import { FilterSellHistoryProvider } from "./GlobalContext/FilterSellHistoryContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -17,9 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <FilterContextProvider>
         <CartProvider>
           <SellHistoryProvider>
-            <FilterSellHistoryProvider>
-              <RouterProvider router={router}></RouterProvider>
-            </FilterSellHistoryProvider>
+            <RouterProvider router={router}></RouterProvider>
           </SellHistoryProvider>
         </CartProvider>
       </FilterContextProvider>

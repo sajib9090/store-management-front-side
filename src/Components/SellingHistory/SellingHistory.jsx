@@ -1,11 +1,43 @@
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { useSellHistoryFilterContext } from "../../GlobalContext/FilterSellHistoryContext";
 import { TbCurrencyTaka } from "react-icons/tb";
+import { useEffect, useState } from "react";
+import SimpleLoader from "../../Components/SimpleLoader/SimpleLoader";
+import axios from "axios";
 
 const SellingHistory = () => {
-  const { selectedDate, setSelectedDate, filteredData, handleCaptureDate } =
-    useSellHistoryFilterContext();
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
+  const day = currentDate.getDate();
+
+  const realtimeDate = year + "-" + month + "-" + day;
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedD, setSelectedD] = useState(realtimeDate);
+  const [loading, setLoading] = useState(false);
+
+  const handleSelectDate = (e) => {
+    e.preventDefault();
+    const date = e.target.selectedDate.value;
+    setSelectedD(date);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/get/soldInvoices/byDate/${selectedD}`
+      )
+      .then((res) => {
+        setFilteredData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, [selectedD]);
 
   const totalDiscount =
     filteredData?.length > 0
@@ -36,19 +68,37 @@ const SellingHistory = () => {
       </h1>
 
       <div className="text-center my-4 flex items-center justify-center">
-        <DatePicker
-          className="text-xl text-center"
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-        />
-        <button
-          onClick={() => handleCaptureDate(selectedDate)}
-          className="bg-blue-400 px-4 text-white"
-        >
-          Search
-        </button>
+        <form onSubmit={handleSelectDate} className="flex items-center">
+          <input
+            type="date"
+            name="selectedDate"
+            required
+            className="bg-gray-300 rounded-l px-2 py-4 text-lg cursor-pointer"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 rounded-r text-lg text-white w-[100px] h-[60px]"
+          >
+            {loading ? <SimpleLoader /> : "Search"}
+          </button>
+        </form>
       </div>
       <div>
+        <div className="pl-2 py-2">
+          <p className="text-xl font-medium">
+            Selected Date: <span className="text-blue-700">{selectedD}</span>
+          </p>
+          <p className="text-xl">
+            Total Invoice Found:{" "}
+            {filteredData?.length == 0 ? (
+              <span className="text-red-600">No Invoice Found</span>
+            ) : (
+              <span className="text-green-500 font-bold">
+                {filteredData?.length}
+              </span>
+            )}
+          </p>
+        </div>
         <table className="overflow-x-scroll mx-auto sm:max-w-full md:max-w-full border-collapse w-full">
           <tr className="bg-blue-300 w-full">
             <th className="hidden md:block text-center p-[8px] border border-white">

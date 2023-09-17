@@ -1,40 +1,14 @@
 /* eslint-disable react/prop-types */
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
-import Swal from "sweetalert2";
-import axios from "axios";
+import { useFilterProductContext } from "../../../GlobalContext/FilterContext";
 
 const TableData = ({ index, item }) => {
+  const { handleDelete } = useFilterProductContext();
   const handleEdit = (item) => {
     console.log(item);
   };
 
-  const handleDelete = (item) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: `You want to delete ${item.title}?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        //
-        axios
-          .delete(
-            `${import.meta.env.VITE_API_URL}/api/delete/product/${item?._id}`
-          )
-          .then((res) => {
-            console.log(res);
-            Swal.fire("Deleted!", `${item?.title}`, "success");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-  };
   return (
     <>
       <td className="hidden md:block text-center p-[8px] border border-white">
