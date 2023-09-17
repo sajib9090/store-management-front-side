@@ -1,5 +1,11 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import reducer from "../Reducers/ProductReducer";
 
 const ProductContext = createContext();
@@ -25,6 +31,15 @@ const initialState = {
 // eslint-disable-next-line react/prop-types
 const ProductProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [productsKey, setProductsKey] = useState(0); // Initialize with 0
+
+  // ... other functions ...
+
+  // Function to refetch products data
+  const refetchProducts = () => {
+    setProductsKey((prevKey) => prevKey + 1);
+  };
 
   // all and categorize product function
   const getProducts = async (url) => {
@@ -77,10 +92,10 @@ const ProductProvider = ({ children }) => {
     getCompanies(`${import.meta.env.VITE_API_URL}/api/get/companies`);
     getGenerics(`${import.meta.env.VITE_API_URL}/api/get/generics`);
     getCategories(`${import.meta.env.VITE_API_URL}/api/get/categories`);
-  }, []);
+  }, [productsKey]);
 
   return (
-    <ProductContext.Provider value={{ ...state }}>
+    <ProductContext.Provider value={{ ...state, refetchProducts }}>
       {children}
     </ProductContext.Provider>
   );

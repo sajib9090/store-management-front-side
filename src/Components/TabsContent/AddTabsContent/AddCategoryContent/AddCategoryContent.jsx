@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import SimpleLoader from "../../../SimpleLoader/SimpleLoader";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useProductContext } from "../../../../GlobalContext/ProductContext";
 
 const AddCategoryContent = () => {
+  const { refetchProducts } = useProductContext();
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -27,6 +29,7 @@ const AddCategoryContent = () => {
         toast.success("New Category Added Successfully.");
         reset();
         setLoading(false);
+        refetchProducts();
       }
     } catch (error) {
       toast.error(error.response.data);

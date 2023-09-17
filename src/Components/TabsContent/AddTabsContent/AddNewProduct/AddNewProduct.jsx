@@ -8,7 +8,8 @@ import axios from "axios";
 
 const AddNewProduct = () => {
   const [loading, setLoading] = useState(false);
-  const { companies, generics, categories } = useProductContext();
+  const { companies, generics, categories, refetchProducts } =
+    useProductContext();
 
   const genericOptions = generics?.map((item) => ({
     value: item.generic,
@@ -82,6 +83,7 @@ const AddNewProduct = () => {
         toast.success("New Product Added Successfully.");
         reset();
         setLoading(false);
+        refetchProducts();
       }
     } catch (error) {
       toast.error(error.response.data);

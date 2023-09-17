@@ -9,10 +9,12 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import Loader from "../../../../Pages/Shared/Loader/Loader";
 import { useNavigate } from "react-router-dom";
+import { useProductContext } from "../../../../GlobalContext/ProductContext";
 
 const AddProductsContent = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { refetchProducts } = useProductContext();
   const { handleInputChange, searchInput } = useFilterProductContext();
   const { purchaseCarts, handleRemoveFromPurchase } = useCartContext();
 
@@ -61,6 +63,7 @@ const AddProductsContent = () => {
                       text: `Your invoice has been posted for future use note this id "${response.data.insertedId}"`,
                     });
                     setLoading(false);
+                    refetchProducts();
                     navigate(`/store/addProducts/${response.data.insertedId}`);
                   }
                 })

@@ -3,8 +3,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import SimpleLoader from "../../../SimpleLoader/SimpleLoader";
+import { useProductContext } from "../../../../GlobalContext/ProductContext";
 
 const AddGenericContent = () => {
+  const { refetchProducts } = useProductContext();
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -27,6 +29,7 @@ const AddGenericContent = () => {
         toast.success("New Generic Added Successfully.");
         reset();
         setLoading(false);
+        refetchProducts();
       }
     } catch (error) {
       toast.error(error.response.data);

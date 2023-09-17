@@ -7,7 +7,7 @@ const FilterProductContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const FilterContextProvider = ({ children }) => {
-  const { products } = useProductContext();
+  const { products, refetchProducts } = useProductContext();
 
   //sorting/filter by search value
   const [searchInput, setSearchInput] = useState("");
@@ -82,8 +82,8 @@ export const FilterContextProvider = ({ children }) => {
             `${import.meta.env.VITE_API_URL}/api/delete/product/${item?._id}`
           )
           .then((res) => {
-            console.log(res);
             Swal.fire("Deleted!", `${item?.title}`, "success");
+            refetchProducts();
           })
           .catch((err) => {
             console.log(err);
