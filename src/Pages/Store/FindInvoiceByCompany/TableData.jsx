@@ -2,12 +2,10 @@
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import { useFilterProductContext } from "../../../GlobalContext/FilterContext";
+import { Link } from "react-router-dom";
 
 const TableData = ({ index, item }) => {
   const { handleDelete } = useFilterProductContext();
-  const handleEdit = (item) => {
-    console.log(item);
-  };
 
   return (
     <>
@@ -20,11 +18,12 @@ const TableData = ({ index, item }) => {
       <td className=" border border-white w-[20%]">{item?.stock}</td>
       <td className=" border border-white w-[20%]">
         <div className="flex items-center justify-center space-x-10">
-          <BiEdit
-            onClick={() => handleEdit(item)}
-            title="Edit"
-            className="cursor-pointer w-6 h-6 text-green-700 hover:scale-125 duration-500"
-          />
+          <Link to={`/store/product/edit/${item?._id}`}>
+            <BiEdit
+              title="Edit"
+              className="cursor-pointer w-6 h-6 text-green-700 hover:scale-125 duration-500"
+            />
+          </Link>
           <BsFillTrash3Fill
             onClick={() => handleDelete(item)}
             title="Delete"
