@@ -1,29 +1,25 @@
-import { useState } from "react";
-import FindProductsByCompany from "../../../Pages/Store/FindInvoiceByCompany/FindProductsByCompany";
+import { NavLink, Outlet } from "react-router-dom";
 
 const StockTabsContent = () => {
-  const [toggleOption, setToggleOption] = useState(0);
   return (
-    <div className="min-h-screen mt-6">
+    <div className="min-h-screen">
       <div className="text-center">
         <div className="flex items-center justify-center lg:h-12 space-x-4 py-4 bg-blue-400">
-          <p
-            className={
-              toggleOption == 1
-                ? "text-gray-100 font-bold cursor-pointer underline"
-                : "text-black cursor-pointer font-bold"
+          <NavLink
+            to={"find_stock_by_company"}
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-100 font-bold underline"
+                : "text-black font-bold"
             }
-            onClick={() => setToggleOption(1)}
           >
             Find Stock by Company
-          </p>
+          </NavLink>
         </div>
         {/* content */}
 
-        <div className={toggleOption == 1 ? "block" : "hidden"}>
-          <div className="">
-            <FindProductsByCompany />
-          </div>
+        <div className="">
+          <Outlet />
         </div>
       </div>
     </div>

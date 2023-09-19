@@ -3,10 +3,12 @@ import { AuthContext } from "../../GlobalContext/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import SimpleLoader from "../../Components/SimpleLoader/SimpleLoader";
+import useCurrentDateTime from "../../Hooks/Time/Time";
 
 const Login = () => {
   const { signInWithEmail, setLoading, loading } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { currentDateTime, greeting } = useCurrentDateTime();
 
   const handleLogin = async (e) => {
     setLoading(true);
@@ -30,11 +32,12 @@ const Login = () => {
       setLoading(false);
     }
   };
-
   return (
     <div>
       <div className="max-w-md mx-auto shadow-2xl min-h-screen flex flex-col justify-center px-4">
         <div>
+          <h1 className="text-center font-bold text-2xl">{greeting}</h1>
+          <p className="text-center">{currentDateTime}</p>
           <h1 className="text-3xl text-center font-bold my-6">Please Login</h1>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">

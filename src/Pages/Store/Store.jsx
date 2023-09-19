@@ -1,45 +1,47 @@
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import TabsHeadline from "../../Components/TabsHeadline/TabsHeadline";
-import AddTabsContent from "../../Components/TabsContent/AddTabsContent/AddTabsContent";
-import StockTabsContent from "../../Components/TabsContent/StockTabsContent/StockTabsContent";
-import SellTabsContent from "../../Components/TabsContent/SellTabsContent/SellTabsContent";
+import { NavLink, Outlet } from "react-router-dom";
 
 const Store = () => {
   return (
     <div className="bg-blue-100">
-      <div className="pt-6 lg:pt-2">
-        <Tabs>
-          <div className="text-center">
-            <TabList>
-              <Tab>
-                <TabsHeadline headline="Add" />
-              </Tab>
-              <Tab>
-                <TabsHeadline headline="Stock" />
-              </Tab>
-              <Tab>
-                <TabsHeadline headline="Sell" />
-              </Tab>
-              <Tab>
-                <TabsHeadline headline="Purchase" />
-              </Tab>
-            </TabList>
-          </div>
+      <nav className="h-[70px] flex items-center justify-center space-x-2">
+        <NavLink
+          to={"add"}
+          className={({ isActive }) =>
+            isActive
+              ? "border-2 flex items-center justify-center text-white bg-blue-400 border-blue-400 w-[130px] h-[40px] rounded"
+              : "border-2 flex items-center justify-center bg-transparent text-blue-500 border-blue-400 w-[130px] h-[40px] rounded"
+          }
+        >
+          <TabsHeadline headline="Add" />
+        </NavLink>
 
-          {/* content */}
-          <TabPanel>
-            <AddTabsContent />
-          </TabPanel>
-          <TabPanel>
-            <StockTabsContent />
-          </TabPanel>
-          <TabPanel>
-            <SellTabsContent />
-          </TabPanel>
-          <TabPanel>
-            <SellTabsContent />
-          </TabPanel>
-        </Tabs>
+        <NavLink
+          to={"stock"}
+          className={({ isActive }) =>
+            isActive
+              ? "border-2 flex items-center justify-center text-white bg-blue-400 border-blue-400 w-[130px] h-[40px] rounded"
+              : "border-2 flex items-center justify-center bg-transparent text-blue-500 border-blue-400 w-[130px] h-[40px] rounded"
+          }
+        >
+          <TabsHeadline headline="Stock" />
+        </NavLink>
+
+        <NavLink
+          to={"sell"}
+          className={({ isActive }) =>
+            isActive
+              ? "border-2 flex items-center justify-center text-white bg-blue-400 border-blue-400 w-[130px] h-[40px] rounded"
+              : "border-2 flex items-center justify-center bg-transparent text-blue-500 border-blue-400 w-[130px] h-[40px] rounded"
+          }
+        >
+          <TabsHeadline headline="Sell" />
+        </NavLink>
+      </nav>
+
+      {/* content */}
+      <div>
+        <Outlet />
       </div>
     </div>
   );

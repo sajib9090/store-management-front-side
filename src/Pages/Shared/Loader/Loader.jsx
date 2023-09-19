@@ -1,16 +1,15 @@
-import { Watch } from "react-loader-spinner";
+import { Hourglass } from "react-loader-spinner";
 const Loader = () => {
   return (
     <div className="h-screen flex items-center pl-[45%]">
-      <Watch
+      <Hourglass
+        visible={true}
         height="80"
         width="80"
-        radius="48"
-        color="#60A5FA"
-        ariaLabel="watch-loading"
+        ariaLabel="hourglass-loading"
         wrapperStyle={{}}
-        wrapperClassName=""
-        visible={true}
+        wrapperClass=""
+        colors={["#60A5FA", "#60A5FA"]}
       />
     </div>
   );

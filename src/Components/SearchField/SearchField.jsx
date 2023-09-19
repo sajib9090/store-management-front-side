@@ -5,7 +5,7 @@ const SearchField = ({ searchInput, handleInputChange }) => {
       <form onSubmit={(e) => e.preventDefault()}>
         <input
           className="py-2 w-full border-2 border-gray-400 rounded-md px-4"
-          type="text"
+          type="search"
           name=""
           placeholder="Search products"
           value={searchInput}
