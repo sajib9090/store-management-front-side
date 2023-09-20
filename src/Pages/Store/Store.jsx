@@ -1,7 +1,12 @@
+import { useEffect } from "react";
 import TabsHeadline from "../../Components/TabsHeadline/TabsHeadline";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 const Store = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("welcome_to_store");
+  }, [navigate]);
   return (
     <div className="bg-blue-100">
       <nav className="h-[70px] flex items-center justify-center space-x-2">
@@ -40,6 +45,7 @@ const Store = () => {
       </nav>
 
       {/* content */}
+
       <div>
         <Outlet />
       </div>

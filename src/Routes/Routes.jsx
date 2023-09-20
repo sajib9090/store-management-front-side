@@ -1,27 +1,71 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layout/Main";
 import Home from "../Pages/Home/Home";
-import Sell from "../Pages/Sell/Sell";
-import Store from "../Pages/Store/Store";
-import SoldInvoice from "../Pages/SoldInvoice/SoldInvoice";
-import PurchaseInvoice from "../Pages/PurchaseInvoice/PurchaseInvoice";
-import EditProduct from "../Pages/Store/EditProduct/EditProduct";
-import Account from "../Pages/Account/Account";
+const Sell = lazy(() => import("../Pages/Sell/Sell"));
+const Store = lazy(() => import("../Pages/Store/Store"));
+const SoldInvoice = lazy(() => import("../Pages/SoldInvoice/SoldInvoice"));
+const PurchaseInvoice = lazy(() =>
+  import("../Pages/PurchaseInvoice/PurchaseInvoice")
+);
+const EditProduct = lazy(() =>
+  import("../Pages/Store/EditProduct/EditProduct")
+);
+const Account = lazy(() => import("../Pages/Account/Account"));
 import PrivateRoute from "./PrivateRoute";
 import Login from "../Pages/Login/Login";
-import CheckAccountActivity from "../Pages/Account/CheckAccountActivity/CheckAccountActivity";
-import CreateAccount from "../Pages/Account/CreateAccount/CreateAccount";
-import AddTabsContent from "../Components/TabsContent/AddTabsContent/AddTabsContent";
-import StockTabsContent from "../Components/TabsContent/StockTabsContent/StockTabsContent";
-import SellTabsContent from "../Components/TabsContent/SellTabsContent/SellTabsContent";
-import AddProductsContent from "../Components/TabsContent/AddTabsContent/AddProductsContent/AddProductsContent";
-import AddGenericContent from "../Components/TabsContent/AddTabsContent/AddGenericContent/AddGenericContent";
-import AddCompanyContent from "../Components/TabsContent/AddTabsContent/AddCompanyContent/AddCompanyContent";
-import AddNewProduct from "../Components/TabsContent/AddTabsContent/AddNewProduct/AddNewProduct";
-import AddCategoryContent from "../Components/TabsContent/AddTabsContent/AddCategoryContent/AddCategoryContent";
-import FindProductsByCompany from "../Pages/Store/FindInvoiceByCompany/FindProductsByCompany";
-import SellingHistory from "../Components/SellingHistory/SellingHistory";
-import FindSoldInvoice from "../Components/FindSoldInvoice/FindSoldInvoice";
+const CheckAccountActivity = lazy(() =>
+  import("../Pages/Account/CheckAccountActivity/CheckAccountActivity")
+);
+const CreateAccount = lazy(() =>
+  import("../Pages/Account/CreateAccount/CreateAccount")
+);
+const AddTabsContent = lazy(() =>
+  import("../Components/TabsContent/AddTabsContent/AddTabsContent")
+);
+const StockTabsContent = lazy(() =>
+  import("../Components/TabsContent/StockTabsContent/StockTabsContent")
+);
+const SellTabsContent = lazy(() =>
+  import("../Components/TabsContent/SellTabsContent/SellTabsContent")
+);
+const AddProductsContent = lazy(() =>
+  import(
+    "../Components/TabsContent/AddTabsContent/AddProductsContent/AddProductsContent"
+  )
+);
+const AddGenericContent = lazy(() =>
+  import(
+    "../Components/TabsContent/AddTabsContent/AddGenericContent/AddGenericContent"
+  )
+);
+const AddCompanyContent = lazy(() =>
+  import(
+    "../Components/TabsContent/AddTabsContent/AddCompanyContent/AddCompanyContent"
+  )
+);
+const AddNewProduct = lazy(() =>
+  import("../Components/TabsContent/AddTabsContent/AddNewProduct/AddNewProduct")
+);
+const AddCategoryContent = lazy(() =>
+  import(
+    "../Components/TabsContent/AddTabsContent/AddCategoryContent/AddCategoryContent"
+  )
+);
+const FindProductsByCompany = lazy(() =>
+  import("../Pages/Store/FindInvoiceByCompany/FindProductsByCompany")
+);
+const SellingHistory = lazy(() =>
+  import("../Components/SellingHistory/SellingHistory")
+);
+const FindSoldInvoice = lazy(() =>
+  import("../Components/FindSoldInvoice/FindSoldInvoice")
+);
+const StoreGreetings = lazy(() =>
+  import("../Pages/Store/StoreGreetings/StoreGreetings")
+);
+import Loader from "../Pages/Shared/Loader/Loader";
 
 export const router = createBrowserRouter([
   {
@@ -39,63 +83,127 @@ export const router = createBrowserRouter([
       },
       {
         path: "/sell",
-        element: <Sell />,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Sell />
+          </Suspense>
+        ),
       },
       {
         path: "/sell/invoice/:id",
-        element: <SoldInvoice />,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <SoldInvoice />
+          </Suspense>
+        ),
       },
       {
         path: "/store",
-        element: <Store />,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Store />
+          </Suspense>
+        ),
         children: [
           {
+            path: "welcome_to_store",
+            element: (
+              <Suspense fallback={<Loader />}>
+                <StoreGreetings />
+              </Suspense>
+            ),
+          },
+          {
             path: "add",
-            element: <AddTabsContent />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <AddTabsContent />
+              </Suspense>
+            ),
             children: [
               {
                 path: "add_products",
-                element: <AddProductsContent />,
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AddProductsContent />
+                  </Suspense>
+                ),
               },
               {
                 path: "add_new_generic",
-                element: <AddGenericContent />,
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AddGenericContent />
+                  </Suspense>
+                ),
               },
               {
                 path: "add_new_company",
-                element: <AddCompanyContent />,
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AddCompanyContent />
+                  </Suspense>
+                ),
               },
               {
                 path: "add_new_product",
-                element: <AddNewProduct />,
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AddNewProduct />
+                  </Suspense>
+                ),
               },
               {
                 path: "add_new_category",
-                element: <AddCategoryContent />,
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AddCategoryContent />
+                  </Suspense>
+                ),
               },
             ],
           },
           {
             path: "stock",
-            element: <StockTabsContent />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <StockTabsContent />
+              </Suspense>
+            ),
             children: [
               {
                 path: "find_stock_by_company",
-                element: <FindProductsByCompany />,
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <FindProductsByCompany />
+                  </Suspense>
+                ),
               },
             ],
           },
           {
             path: "sell",
-            element: <SellTabsContent />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <SellTabsContent />
+              </Suspense>
+            ),
             children: [
               {
                 path: "sell_history",
-                element: <SellingHistory />,
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <SellingHistory />
+                  </Suspense>
+                ),
               },
               {
                 path: "find_sold_invoice",
-                element: <FindSoldInvoice />,
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <FindSoldInvoice />
+                  </Suspense>
+                ),
               },
             ],
           },
@@ -103,26 +211,46 @@ export const router = createBrowserRouter([
       },
       {
         path: "/account",
-        element: <Account />,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Account />
+          </Suspense>
+        ),
         children: [
           {
             path: "check_accounts_activity",
-            element: <CheckAccountActivity />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <CheckAccountActivity />
+              </Suspense>
+            ),
           },
           {
             path: "create_new_account",
-            element: <CreateAccount />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <CreateAccount />
+              </Suspense>
+            ),
           },
         ],
       },
 
       {
         path: "/store/product/edit/:id",
-        element: <EditProduct />,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <EditProduct />
+          </Suspense>
+        ),
       },
       {
         path: "/store/addProducts/:id",
-        element: <PurchaseInvoice />,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <PurchaseInvoice />
+          </Suspense>
+        ),
       },
     ],
   },
