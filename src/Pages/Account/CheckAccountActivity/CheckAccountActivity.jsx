@@ -1,7 +1,7 @@
 const CheckAccountActivity = () => {
   return (
     <div>
-      <h1>CheckAccountActivity</h1>
+      <h1 className="text-center">Coming soon....</h1>
     </div>
   );
 };

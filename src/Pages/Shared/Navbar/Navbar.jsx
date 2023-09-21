@@ -9,8 +9,9 @@ import { useUserContext } from "../../../GlobalContext/UserContext";
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const { singleUser } = useUserContext();
+  // console.log(singleUser);
 
-  const userValidation = typeof singleUser === "undefined" ? {} : singleUser;
+  // const userValidation = typeof singleUser === "undefined" ? {} : singleUser;
 
   return (
     <nav className="lg:sticky lg:top-0">
@@ -39,7 +40,7 @@ const Navbar = () => {
             <BsCartPlusFill className="w-10 h-10 cursor-pointer mx-auto" />
           </div>
         </NavLink>
-        {userValidation?.isAdmin ? (
+        {singleUser && singleUser?.isAdmin ? (
           <>
             <NavLink
               to={"/store"}
@@ -110,7 +111,7 @@ const Navbar = () => {
             <BsCartPlusFill className="w-10 h-10 cursor-pointer mx-auto" />
           </div>
         </NavLink>
-        {userValidation?.isAdmin ? (
+        {singleUser && singleUser?.isAdmin ? (
           <>
             <NavLink
               to={"/store"}

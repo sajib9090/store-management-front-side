@@ -30,6 +30,9 @@ const StockTabsContent = lazy(() =>
 const SellTabsContent = lazy(() =>
   import("../Components/TabsContent/SellTabsContent/SellTabsContent")
 );
+const PurchaseTabsContent = lazy(() =>
+  import("../Components/TabsContent/PurchaseTabsContent/PurchaseTabsContent")
+);
 const AddProductsContent = lazy(() =>
   import(
     "../Components/TabsContent/AddTabsContent/AddProductsContent/AddProductsContent"
@@ -62,9 +65,17 @@ const SellingHistory = lazy(() =>
 const FindSoldInvoice = lazy(() =>
   import("../Components/FindSoldInvoice/FindSoldInvoice")
 );
-const StoreGreetings = lazy(() =>
-  import("../Pages/Store/StoreGreetings/StoreGreetings")
+const PurchaseHistory = lazy(() =>
+  import(
+    "../Components/TabsContent/PurchaseTabsContent/PurchaseHistory/PurchaseHistory"
+  )
 );
+const FindPurchaseInvoice = lazy(() =>
+  import(
+    "../Components/TabsContent/PurchaseTabsContent/FindPurchaseInvoice/FindPurchaseInvoice"
+  )
+);
+
 import Loader from "../Pages/Shared/Loader/Loader";
 
 export const router = createBrowserRouter([
@@ -105,14 +116,15 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
         children: [
-          {
-            path: "welcome_to_store",
-            element: (
-              <Suspense fallback={<Loader />}>
-                <StoreGreetings />
-              </Suspense>
-            ),
-          },
+          // {
+          //   index: true,
+
+          //   element: (
+          //     <Suspense fallback={<Loader />}>
+          //       <AddTabsContent />
+          //     </Suspense>
+          //   ),
+          // },
           {
             path: "add",
             element: (
@@ -202,6 +214,32 @@ export const router = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <FindSoldInvoice />
+                  </Suspense>
+                ),
+              },
+            ],
+          },
+          {
+            path: "purchase",
+            element: (
+              <Suspense fallback={<Loader />}>
+                <PurchaseTabsContent />
+              </Suspense>
+            ),
+            children: [
+              {
+                path: "purchase_history",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <PurchaseHistory />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "find_purchase_invoice",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <FindPurchaseInvoice />
                   </Suspense>
                 ),
               },

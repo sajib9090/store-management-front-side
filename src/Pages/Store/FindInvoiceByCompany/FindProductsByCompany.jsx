@@ -3,11 +3,16 @@ import Select from "react-select";
 import { useProductContext } from "../../../GlobalContext/ProductContext";
 import { useFilterProductContext } from "../../../GlobalContext/FilterContext";
 import TableData from "./TableData";
+import { useSearchParams } from "react-router-dom";
 
 const FindProductsByCompany = () => {
   const { companies } = useProductContext();
   const { setSelectedOption, filterProductsByCompany, selectedOption } =
     useFilterProductContext();
+
+  // eslint-disable-next-line no-unused-vars
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const companyOptions = companies?.map((item) => ({
     value: item.company,
     label: item.company,
@@ -20,6 +25,7 @@ const FindProductsByCompany = () => {
 
   const onSubmit = async (data) => {
     setSelectedOption(data.company.value);
+    setSearchParams({ filter: data.company.value });
   };
   filterProductsByCompany.sort((a, b) => a.stock - b.stock);
 

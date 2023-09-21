@@ -7,6 +7,7 @@ const UserContext = createContext();
 // eslint-disable-next-line react/prop-types
 export const UserContextProvider = ({ children }) => {
   const [allUser, setAllUser] = useState([]);
+
   const [singleUser, setSingleUser] = useState({});
   const { user } = useContext(AuthContext);
 

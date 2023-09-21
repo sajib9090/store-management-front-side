@@ -1,13 +1,13 @@
-import axios from "axios";
 import { useState } from "react";
-import SimpleLoader from "../SimpleLoader/SimpleLoader";
-import InvoiceFooter from "../InvoiceFooter/InvoiceFooter";
-import InvoiceTableContent from "../InvoiceTableContent/InvoiceTableContent";
-import InvoiceTableHead from "../InvoiceTable/InvoiceTableHead";
-import InvoiceTitle from "../InvoiceTitle/InvoiceTitle";
+import SimpleLoader from "../../../SimpleLoader/SimpleLoader";
 import { useSearchParams } from "react-router-dom";
+import axios from "axios";
+import InvoiceTitle from "../../../InvoiceTitle/InvoiceTitle";
+import InvoiceTableHead from "../../../InvoiceTable/InvoiceTableHead";
+import InvoiceTableContent from "../../../InvoiceTableContent/InvoiceTableContent";
+import InvoiceFooter from "../../../InvoiceFooter/InvoiceFooter";
 
-const FindSoldInvoice = () => {
+const FindPurchaseInvoice = () => {
   const [findInvoice, setFindInvoice] = useState({});
   // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +19,9 @@ const FindSoldInvoice = () => {
     const inputValue = e.target.form.searchValue.value;
     setSearchParams({ filter: inputValue });
     axios
-      .get(`${import.meta.env.VITE_API_URL}/api/get/soldInvoice/${inputValue}`)
+      .get(
+        `${import.meta.env.VITE_API_URL}/api/get/purchaseInvoice/${inputValue}`
+      )
       .then((res) => {
         setFindInvoice(res.data);
         setLoading(false);
@@ -29,8 +31,7 @@ const FindSoldInvoice = () => {
         setLoading(false);
       });
   };
-  const soldItems = findInvoice.invoice ? findInvoice.invoice[0] : [];
-
+  const purchaseItems = findInvoice.invoice ? findInvoice.invoice[0] : [];
   return (
     <div>
       <div className="max-w-xl bg-slate-200 mx-auto">
@@ -59,37 +60,42 @@ const FindSoldInvoice = () => {
             <div className="max-w-lg bg-blue-50 mx-auto shadow-2xl">
               <InvoiceTitle
                 id={findInvoice._id}
-                category={"Sold Invoice"}
+                category={"Purchase Invoice"}
                 createdDate={"Created Date:"}
                 time={findInvoice?.createdTime}
               />
               <div className="shadow-md">
                 <table className="overflow-x-scroll mx-auto sm:max-w-full md:max-w-full border-collapse w-full">
                   <InvoiceTableHead />
-                  {soldItems?.soldProducts &&
-                    soldItems?.soldProducts?.map((item, index) => (
+                  {purchaseItems?.invoice &&
+                    purchaseItems?.invoice?.map((item, index) => (
                       <InvoiceTableContent
                         key={index}
                         serial={index + 1}
                         productName={item?.product_name}
                         price={
-                          item?.product_quantity * item?.product_price_per_unit
+                          item?.product_quantity *
+                          item?.product_purchase_price_per_unit
                         }
                         quantity={item?.product_quantity}
-                        pricePerUnit={item?.product_price_per_unit}
+                        pricePerUnit={item?.product_purchase_price_per_unit}
                       />
                     ))}
                 </table>
                 <InvoiceFooter
-                  price={soldItems?.totalPrice}
+                  price={
+                    purchaseItems?.beforeDiscountPrice
+                      ? purchaseItems.beforeDiscountPrice.toFixed(2)
+                      : "0.00"
+                  }
                   discount={
-                    soldItems?.totalDiscount
-                      ? soldItems.totalDiscount.toFixed(2)
+                    purchaseItems?.totalDiscount
+                      ? purchaseItems.totalDiscount.toFixed(2)
                       : "0.00"
                   }
                   finalPrice={
-                    soldItems?.discountedPrice
-                      ? soldItems?.discountedPrice.toFixed(2)
+                    purchaseItems?.afterDiscountPrice
+                      ? purchaseItems?.afterDiscountPrice.toFixed(2)
                       : "0.00"
                   }
                 />
@@ -102,4 +108,4 @@ const FindSoldInvoice = () => {
   );
 };
 
-export default FindSoldInvoice;
+export default FindPurchaseInvoice;

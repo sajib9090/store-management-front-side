@@ -17,6 +17,8 @@ const AddProductsContent = () => {
   const { refetchProducts } = useProductContext();
   const { handleInputChange, searchInput } = useFilterProductContext();
   const { purchaseCarts, handleRemoveFromPurchase } = useCartContext();
+  const [discountValue, setDiscountValue] = useState(0);
+  const [discountedAmount, setDiscountedAmount] = useState(0);
 
   const subTotal =
     purchaseCarts.length > 0
@@ -30,7 +32,28 @@ const AddProductsContent = () => {
           .toFixed(2)
       : 0;
 
-  const postPurchaseInvoice = (invoice) => {
+  const onDiscountInputChange = (event) => {
+    setDiscountValue(event.target.value);
+  };
+
+  const handleDiscount = (discountAmount) => {
+    setDiscountedAmount(discountAmount);
+  };
+
+  const postPurchaseInvoice = (
+    invoice,
+    totalDiscount,
+    afterDiscountPrice,
+    beforeDiscountPrice
+  ) => {
+    const invoiceData = [
+      {
+        invoice,
+        totalDiscount: parseFloat(totalDiscount),
+        afterDiscountPrice: parseFloat(afterDiscountPrice),
+        beforeDiscountPrice: parseFloat(beforeDiscountPrice),
+      },
+    ];
     Swal.fire({
       title: "Are you sure?",
       text: "You want to post this invoice?",
@@ -53,7 +76,7 @@ const AddProductsContent = () => {
               axios
                 .post(
                   `${import.meta.env.VITE_API_URL}/api/add/purchaseInvoice`,
-                  invoice
+                  invoiceData
                 )
                 .then((response) => {
                   if (response.data.insertedId) {
@@ -119,10 +142,10 @@ const AddProductsContent = () => {
               title={item.product_name}
               quantity={item.product_quantity}
               price_per_unit={item.product_purchase_price_per_unit}
-              total_price={
+              total_price={(
                 parseFloat(item.product_quantity) *
                 parseFloat(item.product_purchase_price_per_unit)
-              }
+              ).toFixed(2)}
               buttonClick={() => handleRemoveFromPurchase(item)}
             />
           ))}
@@ -139,16 +162,45 @@ const AddProductsContent = () => {
             </div>
             <p className="border-b border-gray-400"></p>
             <div className="">
+              <p className="flex justify-between">
+                <span className="text-start">
+                  Discount:{" "}
+                  <input
+                    type="number"
+                    placeholder="amount"
+                    className="w-[70px] px-2"
+                    value={discountValue}
+                    onChange={onDiscountInputChange}
+                  />
+                  <button
+                    onClick={() => handleDiscount(discountValue)}
+                    className="bg-gray-700 text-white px-2"
+                  >
+                    Give
+                  </button>
+                </span>
+                <span className="text-end">{discountedAmount}</span>
+              </p>
+            </div>
+            <p className="border-b border-gray-400"></p>
+            <div className="">
               <p className="flex justify-between font-bold">
                 <span className="text-start">Grand Total:</span>
-                <span className="text-end">{subTotal}</span>
+                <span className="text-end">{subTotal - discountedAmount}</span>
               </p>
             </div>
             <p className="border-b-2 border-black"></p>
             <div className="text-end">
               <button
                 disabled={purchaseCarts == 0}
-                onClick={() => postPurchaseInvoice(purchaseCarts)}
+                onClick={() =>
+                  postPurchaseInvoice(
+                    purchaseCarts,
+                    discountedAmount,
+                    subTotal - discountedAmount,
+                    subTotal
+                  )
+                }
                 className="bg-blue-600 px-4 py-1 text-white hover:bg-gray-900 duration-500 rounded-md"
               >
                 Post Invoice

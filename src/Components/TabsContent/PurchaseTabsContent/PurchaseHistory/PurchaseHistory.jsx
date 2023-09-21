@@ -1,23 +1,22 @@
-import { TbCurrencyTaka } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import SimpleLoader from "../../Components/SimpleLoader/SimpleLoader";
-import axios from "axios";
+import SimpleLoader from "../../../SimpleLoader/SimpleLoader";
+import { TbCurrencyTaka } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 
-const SellingHistory = () => {
+const PurchaseHistory = () => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
   const day = currentDate.getDate();
 
   const realtimeDate = year + "-" + month + "-" + day;
-
-  const [filteredData, setFilteredData] = useState([]);
   const [selectedD, setSelectedD] = useState(realtimeDate);
+  const [filteredData, setFilteredData] = useState([]);
+
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
-
   const handleSelectDate = (e) => {
     e.preventDefault();
     const date = e.target.selectedDate.value;
@@ -31,7 +30,7 @@ const SellingHistory = () => {
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }/api/get/soldInvoices/byDate/${selectedD}`
+        }/api/get/purchaseInvoices/byDate/${selectedD}`
       )
       .then((res) => {
         setFilteredData(res.data);
@@ -49,26 +48,28 @@ const SellingHistory = () => {
           .reduce((sum, item) => item?.invoice[0].totalDiscount + sum, 0)
           .toFixed(2)
       : 0;
+
   const beforeDiscountPrice =
     filteredData?.length > 0
       ? filteredData
           .reduce((sum, item) => {
-            const totalPrice = parseFloat(item?.invoice[0].totalPrice);
+            const totalPrice = parseFloat(item?.invoice[0].beforeDiscountPrice);
             return isNaN(totalPrice) ? sum : totalPrice + sum;
           }, 0)
           .toFixed(2)
       : 0;
+
   const afterDiscountPrice =
     filteredData?.length > 0
       ? filteredData
-          .reduce((sum, item) => item?.invoice[0].discountedPrice + sum, 0)
+          .reduce((sum, item) => item?.invoice[0].afterDiscountPrice + sum, 0)
           .toFixed(2)
       : 0;
 
   return (
     <div>
       <h1 className="text-center text-xl font-semibold my-4">
-        Sell Record Find By Date
+        Purchase Record Find By Date
       </h1>
 
       <div className="text-center my-4 flex items-center justify-center">
@@ -131,16 +132,14 @@ const SellingHistory = () => {
                 {data?.createdTime}
               </td>
               <td className="text-center p-[8px] border border-white w-[15%]">
-                {data?.invoice[0]?.totalPrice}
+                {data?.invoice[0]?.beforeDiscountPrice}
               </td>
               <td className="text-center p-[8px] border border-white w-[10%]">
-                {data?.invoice[0]
-                  ? data?.invoice[0]?.totalDiscount?.toFixed(2)
-                  : "0.00"}
+                {data?.invoice[0] ? data?.invoice[0]?.totalDiscount : "0.00"}
               </td>
               <td className="text-center p-[8px] border border-white w-[15%]">
                 {data?.invoice[0]
-                  ? data?.invoice[0]?.discountedPrice.toFixed(2)
+                  ? data?.invoice[0]?.afterDiscountPrice
                   : "0.00"}
               </td>
             </tr>
@@ -149,7 +148,7 @@ const SellingHistory = () => {
       </div>
       <div className="max-w-[25rem] ml-auto pr-8 space-y-2 py-4">
         <div className="border-b border-gray flex items-center justify-between">
-          <p>Before Discount Sell:</p>
+          <p>Before Discount Price:</p>
           <p>{beforeDiscountPrice}</p>
         </div>
         <div className="border-b border-gray flex items-center justify-between">
@@ -168,4 +167,4 @@ const SellingHistory = () => {
   );
 };
 
-export default SellingHistory;
+export default PurchaseHistory;

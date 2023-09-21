@@ -29,21 +29,9 @@ const PurchaseInvoice = () => {
     }
   }, [id]);
 
-  const purchaseItems = purchaseInvoice?.invoice
-    ? purchaseInvoice?.invoice
+  const purchaseItems = purchaseInvoice.invoice
+    ? purchaseInvoice.invoice[0]
     : [];
-
-  const subTotal =
-    purchaseItems.length > 0
-      ? purchaseItems
-          .reduce(
-            (sum, item) =>
-              item?.product_purchase_price_per_unit * item?.product_quantity +
-              sum,
-            0
-          )
-          .toFixed(2)
-      : 0;
 
   const handlePrint = () => {
     //grab the content that want to print
@@ -56,7 +44,7 @@ const PurchaseInvoice = () => {
 
   const handleRefresh = () => {
     handleRemoveAllPurchaseCart();
-    window.location.href = "/store";
+    window.location.href = "/store/add/add_products";
   };
 
   return (
@@ -71,21 +59,25 @@ const PurchaseInvoice = () => {
             <InvoiceTableHead />
             {!isLoading &&
               purchaseItems &&
-              purchaseItems?.map((item, index) => (
+              purchaseItems?.invoice?.map((item, index) => (
                 <InvoiceTableContent
                   key={index}
                   serial={index + 1}
                   productName={item?.product_name}
-                  price={
+                  price={(
                     item?.product_quantity *
                     item?.product_purchase_price_per_unit
-                  }
+                  ).toFixed(2)}
                   quantity={item?.product_quantity}
                   pricePerUnit={item?.product_purchase_price_per_unit}
                 />
               ))}
           </table>
-          <InvoiceFooter price={subTotal} discount={0} finalPrice={subTotal} />
+          <InvoiceFooter
+            price={purchaseItems?.beforeDiscountPrice}
+            discount={purchaseItems?.totalDiscount}
+            finalPrice={purchaseItems?.afterDiscountPrice}
+          />
         </div>
         <div className="max-w-[16rem] flex items-center justify-between ml-auto py-6 px-4">
           <Link to={"/store"}>
