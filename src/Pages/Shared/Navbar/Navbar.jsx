@@ -9,9 +9,6 @@ import { useUserContext } from "../../../GlobalContext/UserContext";
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const { singleUser } = useUserContext();
-  // console.log(singleUser);
-
-  // const userValidation = typeof singleUser === "undefined" ? {} : singleUser;
 
   return (
     <nav className="lg:sticky lg:top-0">
@@ -43,7 +40,7 @@ const Navbar = () => {
         {singleUser && singleUser?.isAdmin ? (
           <>
             <NavLink
-              to={"/store"}
+              to={"/store/add"}
               className={({ isActive }) =>
                 isActive
                   ? "bg-gray-200 py-2 scale-125"
@@ -114,7 +111,7 @@ const Navbar = () => {
         {singleUser && singleUser?.isAdmin ? (
           <>
             <NavLink
-              to={"/store"}
+              to={"/store/add"}
               className={({ isActive }) =>
                 isActive
                   ? "bg-gray-200 scale-125 py-1 px-2"

@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
-
 import { Navigate, useLocation } from "react-router-dom";
-
 import { useContext } from "react";
 import { AuthContext } from "../GlobalContext/AuthProvider";
 import Loader from "../Pages/Shared/Loader/Loader";

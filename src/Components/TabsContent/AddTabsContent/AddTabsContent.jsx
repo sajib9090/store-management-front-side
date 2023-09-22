@@ -59,6 +59,7 @@ const AddTabsContent = () => {
           Add New Category
         </NavLink>
       </div>
+
       {/* content */}
 
       <div>
