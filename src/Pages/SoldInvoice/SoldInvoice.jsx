@@ -1,18 +1,21 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import InvoiceTableHead from "../../Components/InvoiceTable/InvoiceTableHead";
 import InvoiceTableContent from "../../Components/InvoiceTableContent/InvoiceTableContent";
 import InvoiceTitle from "../../Components/InvoiceTitle/InvoiceTitle";
 import InvoiceFooter from "../../Components/InvoiceFooter/InvoiceFooter";
 import { useCartContext } from "../../GlobalContext/CartContext";
+import { useProductContext } from "../../GlobalContext/ProductContext";
 
 const SoldInvoice = () => {
   const { id } = useParams();
   const [soldInvoice, setSoldInvoice] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const { handleRemoveAllSoldCart } = useCartContext();
+  const { refetchProducts } = useProductContext();
   const printableRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id !== undefined && id !== null) {
@@ -20,6 +23,7 @@ const SoldInvoice = () => {
         .get(`${import.meta.env.VITE_API_URL}/api/get/soldInvoice/${id}`)
         .then((res) => {
           setSoldInvoice(res.data);
+          refetchProducts();
           setIsLoading(false);
         })
         .catch((err) => {
@@ -45,7 +49,7 @@ const SoldInvoice = () => {
 
   const handleRefresh = () => {
     handleRemoveAllSoldCart();
-    window.location.href = "/sell";
+    navigate("/sell");
   };
 
   return (
@@ -87,7 +91,7 @@ const SoldInvoice = () => {
         </div>
         <div className="max-w-[15rem] flex items-center justify-between ml-auto py-6 px-4">
           <button
-            onClick={(handleRemoveAllSoldCart, handleRefresh)}
+            onClick={handleRefresh}
             className="bg-gray-500 px-2 py-1 text-white"
           >
             Back to Sell

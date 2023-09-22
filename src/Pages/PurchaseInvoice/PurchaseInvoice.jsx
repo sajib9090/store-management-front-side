@@ -1,18 +1,22 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import InvoiceFooter from "../../Components/InvoiceFooter/InvoiceFooter";
 import InvoiceTableContent from "../../Components/InvoiceTableContent/InvoiceTableContent";
 import InvoiceTitle from "../../Components/InvoiceTitle/InvoiceTitle";
 import InvoiceTableHead from "../../Components/InvoiceTable/InvoiceTableHead";
-import { useCartContext } from "../../GlobalContext/CartContext";
+import { useProductContext } from "../../GlobalContext/ProductContext";
+import { usePurchaseCartContext } from "../../GlobalContext/PurchaseCartContext";
 
 const PurchaseInvoice = () => {
   const { id } = useParams();
   const [purchaseInvoice, setPurchaseInvoice] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const { handleRemoveAllPurchaseCart } = useCartContext();
+  const { handleRemoveAllPurchaseCart, purchaseCarts } =
+    usePurchaseCartContext();
+  const { refetchProducts } = useProductContext();
   const printableRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id !== undefined && id !== null) {
@@ -21,6 +25,7 @@ const PurchaseInvoice = () => {
         .then((res) => {
           setPurchaseInvoice(res.data);
           setIsLoading(false);
+          refetchProducts();
         })
         .catch((err) => {
           console.log(err);
@@ -43,8 +48,8 @@ const PurchaseInvoice = () => {
   };
 
   const handleRefresh = () => {
-    handleRemoveAllPurchaseCart();
-    window.location.href = "/store/add/add_products";
+    handleRemoveAllPurchaseCart(purchaseCarts);
+    navigate("/store/add/add_products");
   };
 
   return (
@@ -80,14 +85,13 @@ const PurchaseInvoice = () => {
           />
         </div>
         <div className="max-w-[16rem] flex items-center justify-between ml-auto py-6 px-4">
-          <Link to={"/store"}>
-            <button
-              onClick={handleRefresh}
-              className="bg-gray-500 px-2 py-1 text-white"
-            >
-              Back to Store
-            </button>
-          </Link>
+          <button
+            onClick={handleRefresh}
+            className="bg-gray-500 px-2 py-1 text-white"
+          >
+            Back to Store
+          </button>
+
           <button
             onClick={handlePrint}
             className="bg-blue-500 px-2 py-1 text-white"

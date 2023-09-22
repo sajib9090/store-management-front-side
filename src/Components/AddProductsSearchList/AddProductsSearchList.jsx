@@ -1,12 +1,12 @@
 import { useState } from "react";
 import HeadlessTableContent from "../HeadlessTableContent/HeadlessTableContent";
 import { useFilterProductContext } from "../../GlobalContext/FilterContext";
-import { useCartContext } from "../../GlobalContext/CartContext";
+import { usePurchaseCartContext } from "../../GlobalContext/PurchaseCartContext";
 
 const AddProductsSearchList = () => {
   const [inputValue, setInputValue] = useState(1);
   const { filteredProducts, setSearchInput } = useFilterProductContext();
-  const { addPurchasedProducts } = useCartContext();
+  const { addPurchasedProducts } = usePurchaseCartContext();
   const onInputChange = (e) => {
     setInputValue(e.target.value);
   };

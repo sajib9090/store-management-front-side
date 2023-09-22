@@ -46,7 +46,7 @@ const AddCompanyContent = () => {
           <label className="py-2">Write New Company*</label>
           <input
             className="px-4 py-2"
-            type="text"
+            type="search"
             placeholder="Company"
             {...register("company", { required: true })}
             aria-invalid={errors.company ? "true" : "false"}

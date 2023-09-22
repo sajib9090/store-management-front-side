@@ -47,7 +47,7 @@ const AddGenericContent = () => {
           <label className="py-2">Write New Generic*</label>
           <input
             className="px-4 py-2"
-            type="text"
+            type="search"
             placeholder="Generic"
             {...register("generic", { required: true })}
             aria-invalid={errors.generic ? "true" : "false"}

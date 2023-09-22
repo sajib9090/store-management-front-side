@@ -204,7 +204,7 @@ const Sell = () => {
                 <p className="border-b-2 border-black"></p>
                 <div className="text-end">
                   <button
-                    disabled={carts.length == 0}
+                    disabled={carts?.length == 0}
                     onClick={() =>
                       handleSellingInvoice(
                         carts,

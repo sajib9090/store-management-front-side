@@ -1,7 +1,6 @@
 import SearchField from "../../../SearchField/SearchField";
 import AddProductsSearchList from "../../../AddProductsSearchList/AddProductsSearchList";
 import { useFilterProductContext } from "../../../../GlobalContext/FilterContext";
-import { useCartContext } from "../../../../GlobalContext/CartContext";
 import Table from "../../../Table/Table";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -10,18 +9,19 @@ import { useState } from "react";
 import Loader from "../../../../Pages/Shared/Loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { useProductContext } from "../../../../GlobalContext/ProductContext";
+import { usePurchaseCartContext } from "../../../../GlobalContext/PurchaseCartContext";
 
 const AddProductsContent = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { refetchProducts } = useProductContext();
   const { handleInputChange, searchInput } = useFilterProductContext();
-  const { purchaseCarts, handleRemoveFromPurchase } = useCartContext();
+  const { purchaseCarts, handleRemoveFromPurchase } = usePurchaseCartContext();
   const [discountValue, setDiscountValue] = useState(0);
   const [discountedAmount, setDiscountedAmount] = useState(0);
 
   const subTotal =
-    purchaseCarts.length > 0
+    purchaseCarts?.length > 0
       ? purchaseCarts
           .reduce(
             (sum, item) =>

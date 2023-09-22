@@ -1,16 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useProductContext } from "../../../GlobalContext/ProductContext";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import SimpleLoader from "../../../Components/SimpleLoader/SimpleLoader";
+import { AuthContext } from "../../../GlobalContext/AuthProvider";
 
 const EditProduct = () => {
   const { id } = useParams();
+  const { user } = useContext(AuthContext);
   const { products } = useProductContext();
   const [foundedItem, setFoundedItem] = useState({});
   const [loading, setLoading] = useState(false);
   const { refetchProducts } = useProductContext();
+  const navigate = useNavigate();
 
   const handleEdit = (e) => {
     setLoading(true);
@@ -24,6 +27,7 @@ const EditProduct = () => {
       stock: available_stock,
       price: sell_price,
       last_edited_date: editedDate,
+      last_editor_email: user?.email,
     };
 
     if (purchase_price < 0 || sell_price < 0 || available_stock < 0) {
@@ -40,6 +44,7 @@ const EditProduct = () => {
             toast.success("Updated Successfully");
             refetchProducts();
             setLoading(false);
+            navigate("/store/stock/find_stock_by_company");
           }
         })
         .catch((err) => {

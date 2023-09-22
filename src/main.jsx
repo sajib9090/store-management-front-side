@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { SellHistoryProvider } from "./GlobalContext/SellHistoryContext";
 import AuthProvider from "./GlobalContext/AuthProvider";
 import { UserContextProvider } from "./GlobalContext/UserContext";
+import { PurchaseCartProvider } from "./GlobalContext/PurchaseCartContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -19,9 +20,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <ProductProvider>
           <FilterContextProvider>
             <CartProvider>
-              <SellHistoryProvider>
-                <RouterProvider router={router}></RouterProvider>
-              </SellHistoryProvider>
+              <PurchaseCartProvider>
+                <SellHistoryProvider>
+                  <RouterProvider router={router}></RouterProvider>
+                </SellHistoryProvider>
+              </PurchaseCartProvider>
             </CartProvider>
           </FilterContextProvider>
         </ProductProvider>

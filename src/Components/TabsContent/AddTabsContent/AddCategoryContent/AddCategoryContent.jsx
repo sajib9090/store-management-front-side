@@ -46,7 +46,7 @@ const AddCategoryContent = () => {
           <label className="py-2">Write New Category*</label>
           <input
             className="px-4 py-2"
-            type="text"
+            type="search"
             placeholder="cream/tablet/capsule/syrup/injection etc..."
             {...register("category", { required: true })}
             aria-invalid={errors.category ? "true" : "false"}
