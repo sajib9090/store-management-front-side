@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
-import { BiEdit } from "react-icons/bi";
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
 import SimpleLoader from "../../../Components/SimpleLoader/SimpleLoader";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AllGeneric = () => {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const itemsPerPage = 20;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [allData, setAllData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const response = await axios.get(
@@ -20,6 +27,7 @@ const AllGeneric = () => {
     );
 
     const fetchedData = response.data;
+    setAllData(fetchedData);
 
     const slicedData = fetchedData?.slice(startIndex, endIndex);
 
@@ -29,6 +37,8 @@ const AllGeneric = () => {
       setData([...data, ...slicedData]);
       setPage(page + 1);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -37,17 +47,62 @@ const AllGeneric = () => {
     }
   }, [page]);
 
+  const filterData = () => {
+    const filtered = allData?.filter((item) =>
+      item?.generic?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredData(filtered);
+  };
+
+  useEffect(() => {
+    if (!searchTerm) {
+      return;
+    } else {
+      filterData();
+    }
+  }, [searchTerm, allData]);
+
+  const handleDelete = (generic) => {
+    axios
+      .delete(
+        `${import.meta.env.VITE_API_URL}/api/delete/generic/${generic?._id}`
+      )
+      .then((res) => {
+        if (res) {
+          toast.success("Deleted");
+          fetchData();
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          toast.error("Something went wrong");
+        }
+        console.log(err);
+      });
+  };
+
   return (
     <div className="mt-12">
+      <div className="mb-4">
+        <input
+          type="search"
+          placeholder="Search Generics"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="px-2 py-1 border border-gray-300"
+        />
+      </div>
       <InfiniteScroll
-        dataLength={data.length}
+        dataLength={searchTerm ? filteredData.length : data.length}
         next={fetchData}
         hasMore={hasMore}
         loader={
-          <div className="my-4">
-            <SimpleLoader />
-            <p>Please wait...</p>
-          </div>
+          isLoading ? (
+            <div className="my-4">
+              <SimpleLoader />
+              <p>Loading...</p>
+            </div>
+          ) : null
         }
       >
         <table className="overflow-x-scroll mx-auto sm:max-w-full md:max-w-full border-collapse w-full">
@@ -55,36 +110,26 @@ const AllGeneric = () => {
             <th className="hidden md:block text-center p-[8px] border border-white">
               No.
             </th>
-            <th className="text-start p-[8px] border border-white w-[45%]">
+            <th className="text-start p-[8px] border border-white w-[50%]">
               Generic
             </th>
-            <th className=" border border-white w-[20%]">Created Date</th>
-            <th className=" border border-white w-[15%]">Last Edited</th>
+            <th className=" border border-white w-[30%]">Created Date</th>
             <th className=" border border-white w-[10%]"></th>
           </tr>
-          {data?.map((item, index) => (
+          {(searchTerm ? filteredData : data)?.map((item, index) => (
             <tr key={index} className="bg-blue-200 w-full">
               <>
                 <td className="hidden md:block text-center">{index + 1}</td>
-                <td className="text-start p-[8px] border border-white w-[45%]">
+                <td className="text-start p-[8px] border border-white w-[50%]">
                   {item?.generic}
                 </td>
-                <td className=" border border-white w-[20%]">
+                <td className=" border border-white w-[30%]">
                   {item?.createdDate}
-                </td>
-                <td className=" border border-white w-[15%]">
-                  <p>{item?.lastEdited ? item?.lastEdited : "N/A"}</p>
-                  <p>{item?.lastEditorEmail ? item?.lastEditorEmail : "N/A"}</p>
                 </td>
                 <td className=" border border-white w-[10%]">
                   <div className="flex items-center justify-center space-x-10">
-                    <Link>
-                      <BiEdit
-                        title="Edit"
-                        className="cursor-pointer w-6 h-6 text-green-700 hover:scale-125 duration-500"
-                      />
-                    </Link>
                     <BsFillTrash3Fill
+                      onClick={() => handleDelete(item)}
                       title="Delete"
                       className="cursor-pointer w-6 h-6 text-red-600 hover:scale-125 duration-500"
                     />
