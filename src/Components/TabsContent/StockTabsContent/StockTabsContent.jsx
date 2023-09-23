@@ -15,6 +15,16 @@ const StockTabsContent = () => {
           >
             Find Stock by Company
           </NavLink>
+          <NavLink
+            to={"all_generic"}
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-100 font-bold underline"
+                : "text-black font-bold"
+            }
+          >
+            All Generic
+          </NavLink>
         </div>
         {/* content */}
 

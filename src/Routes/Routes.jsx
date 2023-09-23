@@ -75,8 +75,8 @@ const FindPurchaseInvoice = lazy(() =>
     "../Components/TabsContent/PurchaseTabsContent/FindPurchaseInvoice/FindPurchaseInvoice"
   )
 );
-
 import Loader from "../Pages/Shared/Loader/Loader";
+const AllGeneric = lazy(() => import("../Pages/Store/AllGeneric/AllGeneric"));
 
 export const router = createBrowserRouter([
   {
@@ -188,6 +188,14 @@ export const router = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <FindProductsByCompany />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "all_generic",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AllGeneric />
                   </Suspense>
                 ),
               },
