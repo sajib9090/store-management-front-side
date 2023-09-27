@@ -1,7 +1,7 @@
 import { Hourglass } from "react-loader-spinner";
 const Loader = () => {
   return (
-    <div className="h-screen flex items-center pl-[45%]">
+    <div className="h-[calc(100vh-70px)] lg:h-screen flex justify-center items-center">
       <Hourglass
         visible={true}
         height="80"

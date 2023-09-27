@@ -93,7 +93,13 @@ export const FilterContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    filteredState(products, searchInput, setFilteredProducts, searchInput);
+    filteredState(
+      products,
+      searchInput,
+      setFilteredProducts,
+      searchInput,
+      setSearchInput
+    );
     FilterProductByCompany(
       products,
       setSelectedOption,
