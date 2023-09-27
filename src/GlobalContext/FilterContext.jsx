@@ -24,8 +24,9 @@ export const FilterContextProvider = ({ children }) => {
     searchInput
   ) => {
     if (searchInput) {
-      const sortBySearchValue = products?.filter((currentElement) =>
-        currentElement?.title?.toLowerCase().includes(searchInput)
+      const sortBySearchValue = products?.filter(
+        (item) =>
+          item?.title?.toLowerCase().indexOf(searchInput.toLowerCase()) !== -1
       );
       setFilteredProducts(sortBySearchValue);
       return;
